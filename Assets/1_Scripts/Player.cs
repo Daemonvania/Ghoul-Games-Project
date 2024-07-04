@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class Player : MonoBehaviour
 {
-
+    
+    //TODO FPS is fucked
+    
     public PlayerInputActions playerControls;
     [SerializeField] Transform baseLocation;
     [SerializeField] Transform backLocation;
@@ -16,14 +19,15 @@ public class Player : MonoBehaviour
     private bool isInteracting;
 
     private Vector3 initCamPos;
-    
+
     private enum states
     {
         Unfocused,
         Focused
     }
-    
+
     private states currenState = states.Unfocused;
+
     private void Awake()
     {
         playerControls = new PlayerInputActions();
@@ -47,23 +51,21 @@ public class Player : MonoBehaviour
     void Update()
     {
         var mousePosition = Input.mousePosition;
-        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        RaycastHit hitInfo;
+
         if (currenState == states.Unfocused)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            RaycastHit hitInfo;
-
-            // Check if the ray hits something within the specified distance
+            // If player is looking around and clicks on a location, move to it
             if (Physics.Raycast(ray, out hitInfo, 300))
             {
-                // Check if the object hit is the one you want (e.g., by tag or layer)
                 Location locationComponent = hitInfo.collider.GetComponent<Location>();
                 if (locationComponent != null)
                 {
-                    print("looking");
                     if (interact.triggered)
                     {
+                        //todo disable location collider..? check what the video does as well
                         MoveToLocation(locationComponent.cameraPosition);
                         currenState = states.Focused;
                     }
@@ -73,7 +75,7 @@ public class Player : MonoBehaviour
             //CAMERA SCROLLING
             float edgeThreshold = 50.0f; // Adjust this value as needed
             float moveSpeed = 5.0f;
-            
+
             Vector3 cameraRight = Camera.main.transform.right; // Right direction relative to the camera
 
             if (mousePosition.x <= edgeThreshold)
@@ -112,6 +114,19 @@ public class Player : MonoBehaviour
         }
         else if (currenState == states.Focused)
         {
+            if (Physics.Raycast(ray, out hitInfo, 300))
+            {
+                // Check if the object hit is the one you want (e.g., by tag or layer)
+                Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
+                if (interactable != null)
+                {
+                    if (interact.triggered)
+                    {
+                       interactable.Interact();
+                    }
+                }
+            }
+
             if (mousePosition.y <= 150)
             {
                 if (interact.triggered)
@@ -130,12 +145,12 @@ public class Player : MonoBehaviour
         transform.rotation = location.rotation;
         currentLocation = location;
     }
-    
-    
-    
-    
-    // void Interact(InputAction.CallbackContext context)
-    // {
-    //     // isInteracting = true;
-    // }
+
+
+//     void Interact(InputAction.CallbackContext context)
+//     {
+//         if (currenState == states.Focused)
+//         {
+//       
+//         }
 }
