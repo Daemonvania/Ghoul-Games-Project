@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Plant : MonoBehaviour
+public abstract class Plant : Interactable
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Interact(Player player)
     {
-        
+        print("interacted with plant");
+         UseTool(player.selectedTool);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void UseTool(ToolType toolType);
 }
