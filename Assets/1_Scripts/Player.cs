@@ -120,8 +120,8 @@ public class Player : MonoBehaviour
             }
 
             //CAMERA SCROLLING
-            float edgeThreshold = 50.0f; // Adjust this value as needed
-            float moveSpeed = 5.0f;
+            float edgeThreshold = 40.0f; 
+            float moveSpeed = 2.0f;
 
             Vector3 cameraRight = Camera.main.transform.right; // Right direction relative to the camera
 
@@ -143,7 +143,7 @@ public class Player : MonoBehaviour
 
             //Clamp camera position
             Vector3 clampedPosition = transform.position;
-            clampedPosition.x = Mathf.Clamp(clampedPosition.x, initCamPos.x - 10, initCamPos.x + 10);
+            clampedPosition.x = Mathf.Clamp(clampedPosition.x, initCamPos.x - 3, initCamPos.x + 3);
             transform.position = clampedPosition;
         }
         else if (currenState == states.Focused)
@@ -237,7 +237,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator ArriveAtLocation(Transform location)
     {
-        float timeToLook = timeToArrive / 1.75f;
+        float timeToLook = timeToArrive * 0.57f;
         yield return new WaitForSeconds(timeToLook);
         cameraAnimator.SetBool("headbop", false);
         interact.Enable();

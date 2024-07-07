@@ -8,18 +8,18 @@ using UnityEngine;
 public class Tool : Interactable
 {
     public ToolType toolType;
-
-    private bool isLookedAt;
     
     private Vector3 originalPos;
     
     private Vector3 lookPos;
     
+    [SerializeField] Transform toolObject;
+    
     void Awake()
     {
         // base.Start();
         originalPos = transform.position;
-        lookPos = new Vector3(originalPos.x, transform.position.y + 0.15f, originalPos.z);
+        lookPos = new Vector3(originalPos.x, transform.position.y + 0.07f, originalPos.z);
     }
 
     private void OnEnable()
@@ -35,18 +35,17 @@ public class Tool : Interactable
 
     public override void OnLook()
     {
-        isLookedAt = true;
-        print(lookPos);
-        transform.DOMove(lookPos, 0.3f);
+
+        toolObject.DOMove(lookPos, 0.15f);
         StopAllCoroutines();
         StartCoroutine(GoToOriginalPos());
     }
     
     private IEnumerator GoToOriginalPos()
     {
+        // canMove = false;
         yield return new WaitForEndOfFrame();
-        isLookedAt = false;
-        transform.DOMove(originalPos, 0.3f);
-            isLookedAt = false;
+        toolObject.DOMove(originalPos, 0.3f);
+
     }
 }
