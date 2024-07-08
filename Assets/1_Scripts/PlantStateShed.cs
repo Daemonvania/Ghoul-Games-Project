@@ -12,14 +12,14 @@ public class PlantStateShed : PlantBaseState
     public override void EnterState(PlantStateManager plant)
     {
         plant._text.text = "Shed";
-        plant._text2.text = "Need" + toolNeeded;
         // plant.GetComponent<Animator>().SetTrigger("Shed");
     }
 
-    public override void Initialize()
+    public override void Initialize(PlantStateManager plant)
     {
         ToolType[] toolTypes = (ToolType[]) Enum.GetValues(typeof(ToolType));
         toolNeeded = toolTypes[Random.Range(0, toolTypes.Length)];
+        plant.shedNeedText.text = "Shedding:" + toolNeeded;
     }
     
     public override void Progress(PlantStateManager plant)

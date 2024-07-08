@@ -9,11 +9,11 @@ public class PlantStateIdle : PlantBaseState
     public override void EnterState(PlantStateManager plant)
     {
         plant._text.text = "Idle";
-        plant._text2.text= "Nothing";
+        // plant._text2.text= "Nothing";
         // plant.GetComponent<Animator>().SetTrigger("Idle");
     }
     
-    public override void Initialize()
+    public override void Initialize(PlantStateManager plant)
     {
     }
     

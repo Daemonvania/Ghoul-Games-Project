@@ -11,8 +11,12 @@ public class PlantStateManager : Interactable
 {
     public PlantBaseState currentState;
 
+    
+    //todo make this better, can be managed by diff script or jus diff way    
     [SerializeField] public TMP_Text _text;
-    [SerializeField] public TMP_Text _text2;
+    
+    [SerializeField] public TMP_Text shedNeedText;
+    [SerializeField] public TMP_Text shakeNeedText;
     
     //Could make it an array..?
     public PlantStateIdle idleState = new PlantStateIdle();
@@ -25,9 +29,9 @@ public class PlantStateManager : Interactable
         currentState = idleState;
         currentState.EnterState(this);
         
-        idleState.Initialize();
-        sheddingState.Initialize();
-        shakingState.Initialize();
+        idleState.Initialize(this);
+        sheddingState.Initialize(this);
+        shakingState.Initialize(this);
         
         //todo set a lot of this up for the editor 
         InvokeRepeating(nameof(ProgressCheck), Random.Range(4, 6), Random.Range(13,16));

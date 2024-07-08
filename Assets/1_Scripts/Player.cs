@@ -148,20 +148,6 @@ public class Player : MonoBehaviour
         }
         else if (currenState == states.Focused)
         {
-            if (Physics.Raycast(ray, out hitInfo, 300))
-            {
-              
-                Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
-                if (interactable != null)
-                {
-                    interactable.OnLook();
-                    if (interact.triggered)
-                    {
-                       interactable.Interact(this);
-                    }
-                }
-            }
-
             //Move back to base location
             if (mousePosition.y <= 150)
             {
@@ -179,10 +165,25 @@ public class Player : MonoBehaviour
                         MoveToLocation(backLocation);
                     }
                     currenState = states.Unfocused;
-                    
-                    //maybe create last location, then that could help with the "base" and "back" location thing as well, you always just go to previous
+                    return;
                 }
             }
+            
+            if (Physics.Raycast(ray, out hitInfo, 300))
+            {
+              
+                Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
+                if (interactable != null)
+                {
+                    interactable.OnLook();
+                    if (interact.triggered)
+                    {
+                       interactable.Interact(this);
+                    }
+                }
+            }
+
+          
         }
     }
 
