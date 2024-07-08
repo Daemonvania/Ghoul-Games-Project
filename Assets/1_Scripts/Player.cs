@@ -218,7 +218,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            transform.DORotate(new Vector3(60f, location.rotation.y, location.rotation.z), 0.5f,
+            transform.DORotate(new Vector3(30f, location.rotation.y, location.rotation.z), 0.5f,
                     RotateMode.LocalAxisAdd);
         }
 

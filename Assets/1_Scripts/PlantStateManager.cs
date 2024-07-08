@@ -22,6 +22,7 @@ public class PlantStateManager : Interactable
     public PlantStateIdle idleState = new PlantStateIdle();
     public PlantStateShed sheddingState = new PlantStateShed();
     public PlantStateShake shakingState = new PlantStateShake();
+    //todo make this manage needs and then pass them on on start, so that they can be unique for each state
     
     private void Start()
     {

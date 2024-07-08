@@ -10,7 +10,7 @@ public class PlantStateShake : PlantBaseState
     private int angerLevel = 0;
     public override void EnterState(PlantStateManager plant)
     {
-        plant._text.text = "Shake";
+        plant._text.text = "Shaking";
 
         // plant.GetComponent<Animator>().SetTrigger("Shake");
     }
@@ -40,7 +40,11 @@ public class PlantStateShake : PlantBaseState
         }
         else
         {
-            Debug.Log("ANGY");
+            angerLevel++;
+            if (angerLevel > 3)
+            {
+                Debug.Log("ANGY");
+            }
         }
     }
 }
