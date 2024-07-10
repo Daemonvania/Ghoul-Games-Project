@@ -20,23 +20,27 @@ public class Player : MonoBehaviour
     [Space]
     
     //MOVEMENT FUNCTIONALITY
-    [SerializeField] Transform baseLocation;
+    public Transform baseLocation;
     [SerializeField] Transform backLocation;
 
-    private Transform currentTransform ;
+    [HideInInspector] public Transform currentTransform;
     private Transform lastTransform;
     private Location currentLocation;
     private Vector3 initCamPos;
     
     //TOOL FUNCTIONALITY
-    [HideInInspector] public ToolType selectedTool;
+    [HideInInspector] public ToolType selectedTool = ToolType.None;
     [FormerlySerializedAs("_bench")] [SerializeField] private Counter counter;
     [SerializeField] public HandTool[] handTools;
     
-    //INTERACTION
+    //Input
     public PlayerInputActions playerControls;
+    private InputAction selectTool1;
+    private InputAction selectTool2;
+    private InputAction selectTool3;
     private InputAction interact;
     private bool isInteracting;
+
     
     
     //MISC
@@ -70,18 +74,45 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         interact = playerControls.Player.Interact;
+        selectTool1 = playerControls.Player.SelectItem1;
+        selectTool2 = playerControls.Player.SelectItem2;
+        selectTool3 = playerControls.Player.SelectItem3;
+        selectTool1.Enable();
+        selectTool2.Enable();
+        selectTool3.Enable();
         interact.Enable();
+        
+        //todo make it interact only once with everything except button, might do it within Interact, idk man
+        // interact.performed += ctx => isInteracting = !isInteracting;
+        
         // interact.performed += Interact;
     }
 
     private void OnDisable()
     {
         interact.Disable();
+        selectTool1.Disable();
+        selectTool2.Disable();
+        selectTool3.Disable();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (selectTool1.triggered)
+        {
+            Debug.Log("tool1");
+            SelectTool(ToolType.Water);
+        }
+        else if (selectTool2.triggered)
+        {
+            SelectTool(ToolType.Fertilizer);
+        }
+        else if (selectTool3.triggered)
+        {
+            SelectTool(ToolType.Pruner);
+        }
+        
         var mousePosition = Input.mousePosition;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -133,13 +164,7 @@ public class Player : MonoBehaviour
             {
                 transform.position += cameraRight * moveSpeed * Time.deltaTime;
             }
-
-
-         
-            // else if (mousePosition.y >= Screen.height - 1)
-            // {
-            //     Debug.Log("Up");
-            // }
+            
 
             //Clamp camera position
             Vector3 clampedPosition = transform.position;
@@ -176,9 +201,23 @@ public class Player : MonoBehaviour
                 if (interactable != null)
                 {
                     interactable.OnLook();
-                    if (interact.triggered)
+                 
+                    if (hitInfo.collider.CompareTag("Crank"))
                     {
-                       interactable.Interact(this);
+                        // Continuously interact while the key is held down
+                        if (interact.IsPressed())
+                        {
+                            interactable.Interact(this);
+                        }
+                    }
+                    else
+                    {
+                        if (interact.triggered)
+                        {
+                            Debug.Log("interacting");
+                            interactable.Interact(this);
+                        }
+                        // wasInteracting = isInteracting;
                     }
                 }
             }
@@ -251,11 +290,11 @@ public class Player : MonoBehaviour
     public void SelectTool(ToolType tool)
     {
         //todo probably should do this somewhere else
-        foreach (Interactable item in counter.items)
-        {
-            item.gameObject.SetActive(true);
-        }
-        
+        // foreach (Interactable item in counter.items)
+        // {
+        //     item.gameObject.SetActive(true);
+        // }
+        //
         selectedTool = tool;
         foreach (HandTool handTool in handTools)
         {
@@ -271,10 +310,9 @@ public class Player : MonoBehaviour
             }
         }
     }
-//     void Interact(InputAction.CallbackContext context)
-//     {
-//         if (currenState == states.Focused)
-//         {
-//       
-//         }
+
+    // void Interact(InputAction.CallbackContext context)
+    // {
+    //     isInteracting = !isInteracting;
+    // }
 }

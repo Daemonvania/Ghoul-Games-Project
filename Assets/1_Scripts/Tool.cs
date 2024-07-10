@@ -15,11 +15,14 @@ public class Tool : Interactable
     
     [SerializeField] Transform toolObject;
     
+    [SerializeField] private PlantStateManager plantStateManager;
+    
     void Awake()
     {
         // base.Start();
         originalPos = transform.position;
         lookPos = new Vector3(originalPos.x, transform.position.y + 0.07f, originalPos.z);
+        plantStateManager = plantStateManager.GetComponentInParent<PlantStateManager>();
     }
 
     private void OnEnable()
@@ -29,8 +32,9 @@ public class Tool : Interactable
 
     public override void Interact(Player player)
     {
-        player.SelectTool(toolType);
-        gameObject.SetActive(false);
+        // player.SelectTool(toolType);
+        // gameObject.SetActive(false);
+        plantStateManager.OnToolUse(toolType);
     }
 
     public override void OnLook()

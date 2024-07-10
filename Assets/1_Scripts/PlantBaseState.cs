@@ -11,4 +11,6 @@ public abstract class PlantBaseState
     public abstract void ToolUsed(PlantStateManager plant, ToolType selectedTool);
 
     public abstract void Initialize(PlantStateManager plant);
+
+    public abstract void Update(PlantStateManager plant);
 }

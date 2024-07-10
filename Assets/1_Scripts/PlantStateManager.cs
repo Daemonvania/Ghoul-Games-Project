@@ -22,22 +22,44 @@ public class PlantStateManager : Interactable
     public PlantStateIdle idleState = new PlantStateIdle();
     public PlantStateShed sheddingState = new PlantStateShed();
     public PlantStateShake shakingState = new PlantStateShake();
-    //todo make this manage needs and then pass them on on start, so that they can be unique for each state
+    public PlantStateAngry angryState = new PlantStateAngry();
     
+    
+    //variables
+    [HideInInspector] public bool jumpScare = false;
+    [HideInInspector] public GameObject jumpScareCanvas;
+    
+    [HideInInspector] public bool isFrozen = false;
+    
+    //todo make this manage needs and then pass them on on start, so that they can be unique for each state, this could also allow having more common functionality
+    //here, instead of having to repeat it in each state
+
+    private void Awake()
+    {
+        jumpScareCanvas = GameObject.FindWithTag("JumpScareCanvas");
+    }
+
     private void Start()
     {
         base.Start();
+
         currentState = idleState;
         currentState.EnterState(this);
         
+        jumpScareCanvas.SetActive(false);
         idleState.Initialize(this);
         sheddingState.Initialize(this);
         shakingState.Initialize(this);
+        angryState.Initialize(this);
         
         //todo set a lot of this up for the editor 
         InvokeRepeating(nameof(ProgressCheck), Random.Range(4, 6), Random.Range(13,16));
     }
 
+    void Update()
+    {
+        currentState.Update(this);
+    }
     public void ProgressCheck()
     {
         Debug.Log("ProgressCheck");
@@ -47,10 +69,14 @@ public class PlantStateManager : Interactable
             currentState.Progress(this);
         }
     }
-    
+
+    public void OnToolUse(ToolType selectedTool)
+    {
+        currentState.ToolUsed(this, selectedTool);
+
+    }
     public override void Interact(Player player)
     {
-        currentState.ToolUsed(this, player.selectedTool);
     }
 
     public override void OnLook()

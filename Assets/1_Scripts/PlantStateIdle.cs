@@ -28,4 +28,9 @@ public class PlantStateIdle : PlantBaseState
     {
         Debug.Log("Tool used in idle state");
     }
+    
+    public override void Update(PlantStateManager plant)
+    {
+        
+    }
 }
