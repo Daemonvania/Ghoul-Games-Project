@@ -7,13 +7,12 @@ using Random = UnityEngine.Random;
 public class PlantStateShed : PlantBaseState
 {
     public ToolType toolNeeded;
-    private int angerLevel = 0;
 
     public override void EnterState(PlantStateManager plant)
     {
-        plant._text.text = "Shedding";
-        angerLevel = 0;
-        
+        // plant._text.text = "Shedding";
+        plant.angerLevel--;
+        plant.shedParticle.Play();
         // plant.GetComponent<Animator>().SetTrigger("Shed");
     }
 
@@ -27,32 +26,39 @@ public class PlantStateShed : PlantBaseState
     
     public override void Progress(PlantStateManager plant)
     {
-      angerLevel++;
-      if (angerLevel > 3)
+      plant.angerLevel++;
+      if (plant.angerLevel >= 3)
       {
-          plant.currentState = plant.angryState;
-          plant.currentState.EnterState(plant);
+          EnterAngryState(plant);
       }
     }
     
     public override void ToolUsed(PlantStateManager plant, ToolType selectedTool)
     {
+        Debug.Log(selectedTool);
         if (selectedTool == ToolType.None) {return;}
         if (selectedTool == toolNeeded)
         {
+            plant.shedParticle.Stop();
+            
             plant.currentState = plant.idleState;
             plant.currentState.EnterState(plant);
         }
         else
         {
-            angerLevel++;
-            if (angerLevel > 3)
+            plant.angerLevel++;
+            if (plant.angerLevel >= 3)
             {
-                plant.jumpScare = true;
-                plant.currentState = plant.angryState;
-                plant.currentState.EnterState(plant);
+                EnterAngryState(plant);
             }
         }
+    }
+
+    void EnterAngryState(PlantStateManager plant)
+    {
+        plant.jumpScare = true;
+        plant.currentState = plant.angryState;
+        plant.currentState.EnterState(plant);
     }
     
     public override void Update(PlantStateManager plant)

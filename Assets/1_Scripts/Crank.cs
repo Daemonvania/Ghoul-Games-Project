@@ -1,26 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Crank : Interactable
 {
   [SerializeField] private float maxElectricity = 100;
-  [SerializeField] private float drainRate = 1;
+  [SerializeField] public float drainRate = 1;
   [SerializeField] private float fillRate = 10;
   private float baseFillRate;
   
+  [Space]
+  
   [SerializeField] private Transform barTransform;
   [SerializeField] private GameObject redLight;
-  private float maxScaleX;
-  [HideInInspector] public float currentElectricity;
+  [SerializeField] private GameObject[] lightBulbs;
 
+  [HideInInspector] public float currentElectricity;
   private GameObject[] lights;
-  
+
+  [HideInInspector] public GameObject[] lightSwitches;
+
+  private float maxScaleX;
+
+  private int lightsOn = 0;
   private bool isDraining = true;
   private bool isDark = false;
   private void Start()
   {
     base.Start();
+
+    lightSwitches = GameObject.FindGameObjectsWithTag("LightSwitch");
+    lightSwitches = lightSwitches.OrderBy(obj => obj.transform.position.x).ToArray();
+    
+    lightBulbs = lightBulbs.OrderBy(obj => obj.transform.position.x).ToArray();
+
     maxScaleX = barTransform.localScale.x;
     currentElectricity = maxElectricity;
     baseFillRate = fillRate;
@@ -32,7 +46,20 @@ public class Crank : Interactable
   {
     if (isDraining)
     {
-      Debug.Log("draining");
+      if (lightsOn == 1)
+      {
+        drainRate = 2;
+      }
+
+      if (lightsOn == 2)
+      {
+        drainRate = 4;
+      }
+
+      if (lightsOn == 3)
+      {
+        currentElectricity = 0;
+      }
 
       isDraining = true;
       currentElectricity -= drainRate * Time.deltaTime;
@@ -40,6 +67,7 @@ public class Crank : Interactable
       if (currentElectricity < 0)
       {
         currentElectricity = 0;
+        lightsOn = 0;
         if (isDark) return;
         foreach (var light in lights)
         {
@@ -47,6 +75,14 @@ public class Crank : Interactable
           redLight.SetActive(true);
           isDark = true;
         }
+
+        //todo prob change so they are lightswitches from the beginning and dont need to getComponent, might use list.
+        foreach (GameObject lightSwitch in lightSwitches)
+        {
+          lightSwitch.GetComponent<LightSwitch>().TurnOff();
+        }
+        
+        fillRate *= 0.5f;
       }
     }
     
@@ -60,11 +96,11 @@ public class Crank : Interactable
     {
       foreach (var light in lights)
       {
-        //todo make it slow down fill rate or take a delay to start, punishment for letting it like this and tense
         light.SetActive(true);
       }
       redLight.SetActive(false);
       isDark = false;
+      fillRate = baseFillRate;
     }
     
     isDraining = false;
@@ -78,7 +114,22 @@ public class Crank : Interactable
     StopAllCoroutines();
     StartCoroutine(EnableDrain());
   }
-
+  
+  
+  
+  public void ToggleLightSwitch(GameObject lightSwitch, bool isOn)
+  {
+    for (int i = 0; i < lightSwitches.Length; i++)
+    {
+      if (lightSwitches[i] == lightSwitch)
+      {
+        lightsOn += isOn ? 1 : -1;
+        lightBulbs[i].SetActive(!isOn);
+      }
+    }
+  }
+  
+  
   private IEnumerator EnableDrain()
   {
     yield return new WaitForSeconds(0.1f);

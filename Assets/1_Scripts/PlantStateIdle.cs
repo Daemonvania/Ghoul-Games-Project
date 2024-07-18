@@ -8,9 +8,11 @@ public class PlantStateIdle : PlantBaseState
 {
     public override void EnterState(PlantStateManager plant)
     {
-        plant._text.text = "Idle";
+        // plant._text.text = "Idle";
         // plant._text2.text= "Nothing";
         // plant.GetComponent<Animator>().SetTrigger("Idle");
+        plant.shedParticle.Stop();
+        plant._animator.SetBool("Shake", false);
     }
     
     public override void Initialize(PlantStateManager plant)
@@ -21,6 +23,7 @@ public class PlantStateIdle : PlantBaseState
     {
         //todo random based on existing states (array seems like the move)
         plant.currentState = Random.value < 0.5f ? plant.sheddingState : plant.shakingState;
+        Debug.Log("enteringState");
         plant.currentState.EnterState(plant);
     }
     

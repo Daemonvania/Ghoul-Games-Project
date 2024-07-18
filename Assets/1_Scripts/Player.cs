@@ -279,11 +279,23 @@ public class Player : MonoBehaviour
     {
         float timeToLook = timeToArrive * 0.57f;
         yield return new WaitForSeconds(timeToLook);
+        
         cameraAnimator.SetBool("headbop", false);
         interact.Enable();
         transform.DORotate(location.rotation.eulerAngles, 0.7f);
         lastTransform = currentTransform;
         currentTransform = location;
+        
+        //might needa to better
+        if (currentLocation != null)
+        {
+             Pot pot = currentLocation.GetComponent<Pot>();
+                if (pot)
+                {
+                    pot.ShowTools();
+                }
+        }
+     
     }
 
 

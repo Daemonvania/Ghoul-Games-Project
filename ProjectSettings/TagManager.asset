@@ -7,6 +7,7 @@ TagManager:
   - JumpScareCanvas
   - Crank
   - Light
+  - LightSwitch
   layers:
   - Default
   - TransparentFX

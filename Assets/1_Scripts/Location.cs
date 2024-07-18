@@ -26,7 +26,7 @@ public abstract class  Location : MonoBehaviour
             item.col.enabled = true;
         }
     }
-    public void OnExit()
+    public virtual void OnExit()
     {
         col.enabled = true;
         foreach (var item in items)
