@@ -78,7 +78,7 @@ public class PlantStateManager : Interactable
     void Update()
     {
         currentState.Update(this);
-
+        _text.text = angerLevel.ToString();
         if (isLit)
         {
             Debug.Log("isLit");

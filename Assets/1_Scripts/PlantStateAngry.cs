@@ -11,7 +11,7 @@ public class PlantStateAngry : PlantBaseState
         {
             JumpScare(plant);
         }
-        plant._text.text = "Angry";
+        // plant._text.text = "Angry";
         // plant.GetComponent<Animator>().SetTrigger("Angry");
     }
     

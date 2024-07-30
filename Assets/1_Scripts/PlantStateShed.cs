@@ -11,7 +11,9 @@ public class PlantStateShed : PlantBaseState
     public override void EnterState(PlantStateManager plant)
     {
         // plant._text.text = "Shedding";
+        if (plant.angerLevel > 0) {
         plant.angerLevel--;
+        }
         plant.shedParticle.Play();
         // plant.GetComponent<Animator>().SetTrigger("Shed");
     }

@@ -15,7 +15,8 @@ public class Crank : Interactable
   [SerializeField] private Transform barTransform;
   [SerializeField] private GameObject redLight;
   [SerializeField] private GameObject[] lightBulbs;
-
+  [SerializeField] private Transform crankObject;
+  
   [HideInInspector] public float currentElectricity;
   private GameObject[] lights;
 
@@ -103,6 +104,7 @@ public class Crank : Interactable
       fillRate = baseFillRate;
     }
     
+    crankObject.Rotate(Vector3.up * 200 * Time.deltaTime, Space.Self);
     isDraining = false;
     currentElectricity+= fillRate * Time.deltaTime;
     

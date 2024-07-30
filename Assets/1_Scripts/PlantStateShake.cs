@@ -11,8 +11,10 @@ public class PlantStateShake : PlantBaseState
     public override void EnterState(PlantStateManager plant)
     {
         // plant._text.text = "Shaking";
-        
-        plant.angerLevel--;
+        if (plant.angerLevel > 0)
+        {
+            plant.angerLevel--;
+        }
         plant._animator.SetBool("Shake", true);
     }
     
