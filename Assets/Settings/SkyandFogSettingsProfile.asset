@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d877ec3e844f2ca46830012e8e79319b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   rotation:
     m_OverrideState: 0
     m_Value: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ef2681fa3dc8c4fa031f044e68c63f, type: 3}
   m_Name: GlobalIllumination
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 0
     m_Value: 1
@@ -378,7 +378,7 @@ MonoBehaviour:
   active: 1
   quality:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 0
   enabled:
     m_OverrideState: 1
     m_Value: 1
@@ -386,7 +386,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   color:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 0, g: 0, b: 0, a: 1}
   tint:
     m_OverrideState: 0
@@ -411,7 +411,7 @@ MonoBehaviour:
     m_Value: 389.6
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 3.68
+    m_Value: 16.36
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
@@ -444,7 +444,7 @@ MonoBehaviour:
     m_Value: 64
   m_VolumetricFogBudget:
     m_OverrideState: 1
-    m_Value: 0.75
+    m_Value: 0.25
   m_ResolutionDepthRatio:
     m_OverrideState: 1
     m_Value: 0.5

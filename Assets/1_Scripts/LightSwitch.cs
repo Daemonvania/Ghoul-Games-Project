@@ -42,7 +42,7 @@ public class LightSwitch : Interactable
         }
         canInteract = false;
         isOn = !isOn;
-        
+        StopAllCoroutines();
         switchObject.DOMove(pulledPos, 0.5f).OnComplete(() =>
         {
             light.SetActive(isOn);

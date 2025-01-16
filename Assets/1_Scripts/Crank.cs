@@ -12,6 +12,8 @@ public class Crank : Interactable
   
   [Space]
   
+  //todo maybe use event Action OnLightsOut to avoid dependencies
+  
   [SerializeField] private Transform barTransform;
   [SerializeField] private GameObject redLight;
   [SerializeField] private GameObject[] lightBulbs;
@@ -67,28 +69,34 @@ public class Crank : Interactable
       // Debug.Log(currentElectricity);
       if (currentElectricity < 0)
       {
-        currentElectricity = 0;
-        lightsOn = 0;
-        if (isDark) return;
-        foreach (var light in lights)
-        {
-          light.SetActive(false);
-          redLight.SetActive(true);
-          isDark = true;
-        }
-
-        //todo prob change so they are lightswitches from the beginning and dont need to getComponent, might use list.
-        foreach (GameObject lightSwitch in lightSwitches)
-        {
-          lightSwitch.GetComponent<LightSwitch>().TurnOff();
-        }
-        
-        fillRate *= 0.5f;
+        GoDark();
       }
     }
     
     float scale = (currentElectricity / maxElectricity) * maxScaleX; // Calculate scaled value
     barTransform.localScale = new Vector3(scale, barTransform.localScale.y, barTransform.localScale.z);
+  }
+
+  void GoDark()
+  {
+    //todo for sure C# event and increase exposure so all is dark
+    currentElectricity = 0;
+    lightsOn = 0;
+    if (isDark) return;
+    foreach (var light in lights)
+    {
+      light.SetActive(false);
+      redLight.SetActive(true);
+      isDark = true;
+    }
+      
+    //todo prob change so they are lightswitches from the beginning and dont need to getComponent, might use list.
+    foreach (GameObject lightSwitch in lightSwitches)
+    {
+      lightSwitch.GetComponent<LightSwitch>().TurnOff();
+    }
+        
+    fillRate *= 0.5f;
   }
   
   public override void Interact(Player player)
